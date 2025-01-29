@@ -3,16 +3,13 @@
 # Variables
 IMAGE_NAME="react-app"
 DOCKER_HUB_USERNAME="bubbly17"
+DEV_TAG="$DOCKER_HUB_USERNAME/dev:$IMAGE_NAME"
 
-# Pull the latest image
-docker pull $DOCKER_HUB_USERNAME/dev:$IMAGE_NAME
+# Login to Docker Hub
+docker login -u $DOCKER_HUB_USERNAME
 
-# Stop & remove old container
-docker stop $IMAGE_NAME
-docker rm $IMAGE_NAME
+# Push Image
+docker push $DEV_TAG
 
-# Run new container
-docker run -d -p 80:80 --name $IMAGE_NAME $DOCKER_HUB_USERNAME/dev:$IMAGE_NAME
-
-echo "Application deployed successfully."
+echo "Docker Image pushed to Docker Hub successfully."
 
