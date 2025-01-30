@@ -22,7 +22,6 @@ pipeline {
         stage('Push to Docker Hub - prod') {
             steps {
                 script {
-                    // Push the image to the existing 'dev' repository with the 'dev' tag
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
                         docker.image("${DOCKERHUB_USERNAME}/${DOCKER_REPO}:${DOCKER_IMAGE_NAME}").push("prod")	
                     }
