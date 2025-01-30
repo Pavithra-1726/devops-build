@@ -26,7 +26,7 @@ pipeline {
 	  stage('Build Docker Image') {
             steps {
                 // Run your build.sh script to build and tag the Docker image
-               bat 'docker build -t myimage .'
+               bat 'docker build -t ${DOCKER_DEV_REPO}:${IMAGE_TAG} .'
             }
         }
 	     
@@ -37,8 +37,8 @@ pipeline {
                     if (branchName == 'dev') {
                         echo "Pushing to Docker Hub - Dev"
                         // Push the Docker image to the 'dev' repo on Docker Hub
-                        docker.withRegistry('https://index.docker.io/v1/', 'Docker_pass') {
-                            docker.image(IMAGE_NAME).push('dev')
+                        docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                            docker.image("${DOCKER_DEV_REPO}:${IMAGE_TAG}").push()
                         }
 		    }
 		}
