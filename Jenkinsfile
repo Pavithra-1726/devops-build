@@ -28,5 +28,20 @@ pipeline {
                bat 'docker build -t myimage .'
             }
         }
+	     
+	  stage('Push to Docker Hub (Dev)') {
+            steps {
+                script {
+                    def branchName = env.GIT_BRANCH.replaceAll(/^origin\//, '')  // Remove 'origin/' if it's present
+                    if (branchName == 'dev') {
+                        echo "Pushing to Docker Hub - Dev"
+                        // Push the Docker image to the 'dev' repo on Docker Hub
+                        docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
+                            docker.image(IMAGE_NAME).push('dev')
+                        }
+		    }
+		}
+             }
+         }
     }
 }
