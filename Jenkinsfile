@@ -4,7 +4,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'paviimage1'
         DOCKERHUB_USERNAME = 'bubbly17'
         DOCKERHUB_CREDENTIALS_ID = 'Docker_pass'
-        DOCKER_REPO = 'prod'  // The name of the existing repository on Docker Hub
+        DOCKER_REPO = 'prod'  
     }
     stages {
         stage('Clone Repo') {
