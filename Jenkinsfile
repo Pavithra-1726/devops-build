@@ -8,6 +8,7 @@ pipeline {
 	environment {
         DOCKER_DEV_REPO = "bubbly17/dev"
         DOCKER_PROD_REPO = "bubbly17/prod"
+	IMAGE_NAME = "myimage" // Define IMAGE_NAME here
         IMAGE_TAG = "latest"
         DOCKERHUB_CREDENTIALS_ID = 'Docker_pass'
     }
