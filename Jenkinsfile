@@ -31,18 +31,24 @@ pipeline {
         }
 	     
 	  stage('Push to Docker Hub (Dev)') {
-            steps {
-                script {
-                    def branchName = env.GIT_BRANCH.replaceAll(/^origin\//, '')  // Remove 'origin/' if it's present
-                    if (branchName == 'dev') {
-                        echo "Pushing to Docker Hub - Dev"
-                        // Push the Docker image to the 'dev' repo on Docker Hub
-                        docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                            docker.image("${DOCKER_DEV_REPO}:${IMAGE_TAG}").push()
-                        }
-		    }
-		}
-             }
-         }
+    steps {
+        script {
+            def branchName = env.GIT_BRANCH.replaceAll(/^origin\//, '')  // Clean branch name
+            
+            // Check if the branch is 'dev' before pushing to Docker Hub
+            if (branchName == 'dev') {
+                echo "Pushing Docker image to Docker Hub - Dev"
+                
+                // Login to Docker Hub using the Docker credentials
+                withCredentials([usernamePassword(credentialsId: 'Docker_pass', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh """
+                        docker login -u \$DOCKER_USERNAME -p \$DOCKER_PASSWORD
+                        docker image ${DOCKER_DEV_REPO}:${IMAGE_TAG} push
+                    """
+                }
+            }
+        }
+    }
+}
     }
 }
