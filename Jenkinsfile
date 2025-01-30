@@ -1,38 +1,40 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(name: 'BRANCH_NAME', choices: ['dev', 'main'], description: 'Choose the branch to deploy')
+    }
+
     environment {
-        DOCKER_HUB_USERNAME = 'bubbly17'
-        IMAGE_NAME = 'react-app'
+        DOCKER_DEV_REPO = "bubbly17/dev"
+        DOCKER_PROD_REPO = "bubbly17/prod"
+        IMAGE_TAG = "latest"
+		DOCKERHUB_CREDENTIALS_ID = 'Docker_pass'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'dev', url: 'https://github.com/Pavithra-1726/devops-build.git'
+                script {
+                    // Checkout the selected branch (dev or main)
+                    git branch: "${params.BRANCH_NAME}", url: 'https://github.com/Pavithra-1726/devops-build'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh './build.sh'
             }
         }
 
-        stage('Push to Docker Hub') {
-            steps {
-                withDockerRegistry([credentialsId: 'Docker_pass', url: '']) {
-                    script {
-                        if (env.BRANCH_NAME == 'dev') {
-                            sh 'docker tag $IMAGE_NAME $DOCKER_HUB_USERNAME/dev:$IMAGE_NAME'
-                            sh 'docker push $DOCKER_HUB_USERNAME/dev:$IMAGE_NAME'
-                        } else if (env.BRANCH_NAME == 'main') {
-                            sh 'docker tag $IMAGE_NAME $DOCKER_HUB_USERNAME/prod:$IMAGE_NAME'
-                            sh 'docker push $DOCKER_HUB_USERNAME/prod:$IMAGE_NAME'
-                        }
-                    }
-                }
-            }
+
+    post {
+        success {
+            echo "Build is Successful! 🎉"
+        }
+        failure {
+            echo "Build is Failed! 🚨"
         }
     }
 }
