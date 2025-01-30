@@ -37,7 +37,7 @@ pipeline {
                     if (branchName == 'dev') {
                         echo "Pushing to Docker Hub - Dev"
                         // Push the Docker image to the 'dev' repo on Docker Hub
-                        docker.withRegistry('https://index.docker.io/v1/', Docker_pass) {
+                        docker.withRegistry('https://index.docker.io/v1/', 'Docker_pass') {
                             docker.image(IMAGE_NAME).push('dev')
                         }
 		    }
