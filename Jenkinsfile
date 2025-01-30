@@ -25,7 +25,7 @@ pipeline {
 	  stage('Build Docker Image') {
             steps {
                 // Run your build.sh script to build and tag the Docker image
-                sh './build.sh'
+               bat 'docker build -t myimage .
             }
         }
     }
