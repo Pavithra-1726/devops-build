@@ -9,7 +9,7 @@ pipeline {
         DOCKER_DEV_REPO = "bubbly17/dev"
         DOCKER_PROD_REPO = "bubbly17/prod"
         IMAGE_TAG = "latest"
-        DOCKERHUB_CREDENTIALS_ID = 'Docker_pass
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_pass'
     }
 	
      stages {
